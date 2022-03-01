@@ -10,6 +10,7 @@
  *
  * @author dancye
  * @author emszw Emily Szwalek Feb 2022
+ * @author Kimio Nishino Feb 2022
  */
 public abstract class Card {
     //default modifier for child classes
