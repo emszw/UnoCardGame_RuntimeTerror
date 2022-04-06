@@ -5,6 +5,8 @@
 package UnoCardGame;
 
 import CardGame.Game;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  *
@@ -12,15 +14,39 @@ import CardGame.Game;
  */
 public class UnoCardGame extends Game{
     
+    private static ArrayList<UnoPlayer> players;
+
+    
+    
+    public static void startGame(GroupOfCards cards, ArrayList<UnoPlayer> players) {
+        System.out.println("Initializing players...");  
+        Scanner scan = new Scanner(System.in);
+        for (int i=0; i<4; i++) {
+            System.out.println("Name for player " + i + ": ");
+            players.add(new UnoPlayer(scan.nextLine()));
+            players.get(i).fillHand(cards);
+        }
+        
+    }
+    
+    
+    
+    
+    
     public static void main(String[] args) {
-        System.out.println("Hello world");
+        System.out.println("Welcome to Uno Card Game");
+        players = new ArrayList<>(4);
         GroupOfCards deck = new GroupOfCards();
         deck.fillDeck();
-        System.out.println("Size of deck: " + deck.getSize());
+        deck.shuffle();
+        startGame(deck, players);
+        for (UnoPlayer player : players) {
+            player.displayHand();
+        }
+        System.out.println(deck.getSize() + " cards remaining in the deck");
+        System.out.println("Full deck remaining: ");
         deck.printGroup();
-    
-    
-    
+        
     
     
     

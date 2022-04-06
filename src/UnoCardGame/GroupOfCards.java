@@ -8,7 +8,7 @@ package UnoCardGame;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import CardGame.Card;
+import UnoCardGame.CardProperties.*;
 
 
 /**
@@ -22,7 +22,7 @@ import CardGame.Card;
  * @author emszw Emily Szwalek Feb 2022
  * @modifier Kimio Nishino April 2022
  */
-public class GroupOfCards extends Card {
+public class GroupOfCards {
     
     /**
      * The number of non-zero number cards of each suit in the deck.
@@ -57,6 +57,7 @@ public class GroupOfCards extends Card {
     
     
     public void fillDeck() {
+        System.out.println("Initializing deck...");
         //GENERATING NUMBER CARDS FROM 1 - 9
         for (int i = 1; i <= 9; i++) {
             for (int j = 0; j < NUMBER_OF_DUP_REGULAR_CARDS; j++) {
@@ -96,16 +97,33 @@ public class GroupOfCards extends Card {
             cards.add(new UnoCard(CardColor.NONE, CardNumber.NO_NUMBER, CardRank.WILD_DRAW4));
         }
         this.size = cards.size();
+        System.out.println("Deck with " + this.size + " initialized.");
     }
     
     
     public void printGroup() {
-        for (UnoCard card : cards) {
+        for (UnoCard card : cards) 
             System.out.println(card.toString());
-        }
     }
     
-
+    /**
+     * Method that draws one card from the top of the deck in the 
+     * GroupOfCards, and throws an exception if the deck is not
+     * bigger than zero.
+     * @return card on top of the ArrayList<UnoCard> deck
+     * @throws UnoCardException
+     */
+    public UnoCard drawCard() throws UnoCardException{
+        if(this.size > 0) {
+            this.size--;
+            return cards.remove(0);
+        } else {
+            throw new UnoCardException("Group of Cards size is zero!");
+        }   
+    }
+    
+    
+    
     /**
      * A method that will get the group of cards as an ArrayList
      *
