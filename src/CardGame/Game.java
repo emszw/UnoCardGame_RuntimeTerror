@@ -1,3 +1,5 @@
+package CardGame;
+
 /**
  * SYST 17796 Project Base code.
  * Students can modify and extend to implement their game.
@@ -13,6 +15,7 @@ import java.util.ArrayList;
  * @author dancye
  * @author Paul Bonenfant Jan 2020
  * @author emszw Emily Szwalek Feb 2022
+ * @author Kimio Nishino Feb 2022
  */
 public abstract class Game {
 
