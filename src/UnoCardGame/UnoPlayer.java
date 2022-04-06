@@ -83,7 +83,7 @@ public class UnoPlayer extends Player {
                 table.get(table.size()-1));
         table.add(hand.remove(discardChoice(discardOptions(table.get(table.size()-1)))));
         System.out.println("New card on top of the table: " +
-                table.get(table.size()-1));
+                table.get(table.size()-1) );
         size--;
         if(size == 0)
             throw new UnoCardException("Player has no more cards in hand!", CardException.EMPTY_HAND);
