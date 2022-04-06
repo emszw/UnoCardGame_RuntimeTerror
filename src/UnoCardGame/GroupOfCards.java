@@ -9,6 +9,7 @@ package UnoCardGame;
 import java.util.ArrayList;
 import java.util.Collections;
 import UnoCardGame.CardProperties.*;
+import UnoCardGame.UnoCardException.*;
 
 
 /**
@@ -125,7 +126,7 @@ public class GroupOfCards {
             this.size--;
             return cards.remove(0);
         } else {
-            throw new UnoCardException("Group of Cards size is zero!");
+            throw new UnoCardException("Group of Cards size is zero!", CardException.EMPTY_DECK);
         }   
     }
     

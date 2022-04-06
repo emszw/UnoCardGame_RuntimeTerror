@@ -63,6 +63,12 @@ public class UnoCardGame extends Game{
         System.out.println(deck.getSize() + " cards remaining in the deck");
 //        System.out.println("Full deck remaining: ");
 //        deck.printGroup();
+        try {
+            players.get(0).discardFromHand(table);
+        } catch (UnoCardException e) {
+            System.out.println(e.getMessage());
+        }
+        
         
     
     

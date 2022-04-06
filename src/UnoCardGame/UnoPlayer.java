@@ -6,7 +6,9 @@ package UnoCardGame;
 
 import CardGame.Player;
 import java.util.ArrayList;
-
+import java.util.Scanner;
+import UnoCardGame.CardProperties.CardRank;
+import UnoCardGame.UnoCardException.*;
 /**
  *
  * @author Kimio Nishino
@@ -14,7 +16,7 @@ import java.util.ArrayList;
 public class UnoPlayer extends Player {
     
     private ArrayList<UnoCard> hand;
-    private static int size;
+    private int size;
     
     public UnoPlayer(String name) {
         super(name);
@@ -48,23 +50,53 @@ public class UnoPlayer extends Player {
     }
     
     
-    public ArrayList<Integer> discardOptions(UnoCard topOfTable) {
+    private ArrayList<Integer> discardOptions(UnoCard topOfTable) {
         ArrayList<Integer> availableOptions = new ArrayList<>();
         for (UnoCard unoCard : hand) {
             if(unoCard.getColor() == topOfTable.getColor() ||
-                    unoCard.getNumber() == topOfTable.getNumber())
+                    unoCard.getNumber() == topOfTable.getNumber() ||
+                    unoCard.getRank() == CardRank.WILD ||
+                    unoCard.getRank() == CardRank.WILD_DRAW4)
                 availableOptions.add(hand.indexOf(unoCard));    
         }
         return availableOptions;
     }
     
-    public UnoCard discard(){
-        return null;
+    private int discardChoice(ArrayList<Integer> availableOptions){
+        Scanner scan = new Scanner(System.in);
+        int choice;
+        System.out.println("Available options to discard: ");
+        for (Integer availableOption : availableOptions) {
+            System.out.println(availableOption + ": " + 
+                    hand.get(availableOption).toString());
+        }
+        do {
+            System.out.println("Select one of the available options to discard");
+            choice = scan.nextInt();
+        } while(!availableOptions.contains(choice));
+        scan.close();
+        return choice;
     }
+    
+    public void discardFromHand(ArrayList<UnoCard> table) throws UnoCardException {
+        System.out.println("Card on top of the table: " +
+                table.get(table.size()-1));
+        table.add(hand.remove(discardChoice(discardOptions(table.get(table.size()-1)))));
+        System.out.println("New card on top of the table: " +
+                table.get(table.size()-1));
+        size--;
+        if(size == 0)
+            throw new UnoCardException("Player has no more cards in hand!", CardException.EMPTY_HAND);
+        if(size == 1)
+            throw new UnoCardException("UNO! Player " + super.getName() + 
+                    " has only one card in hand!", CardException.UNO);
+    }
+    
     
     @Override
     public void play() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet."); 
+        // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
  
 }
