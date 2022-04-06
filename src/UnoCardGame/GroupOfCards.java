@@ -55,7 +55,12 @@ public class GroupOfCards {
         cards = new ArrayList<>(); 
     }
     
-    
+    /**
+     * Main method from the GroupOfCards.
+     * It creates a full deck following the rules of the official
+     * UNO Card Game. It makes use of the constants in this class
+     * to generate the correct ammount of cards for each rank and color.
+     */
     public void fillDeck() {
         System.out.println("Initializing deck...");
         //GENERATING NUMBER CARDS FROM 1 - 9
@@ -100,7 +105,9 @@ public class GroupOfCards {
         System.out.println("Deck with " + this.size + " initialized.");
     }
     
-    
+    /**
+     * Method used for debugging only
+     */
     public void printGroup() {
         for (UnoCard card : cards) 
             System.out.println(card.toString());
