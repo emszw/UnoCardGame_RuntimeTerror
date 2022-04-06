@@ -10,10 +10,11 @@ package UnoCardGame;
  */
 public class CardProperties {
     protected enum CardColor {
-        REG,
+        RED,
         GREEN,
         BLUE,
-        YELLOW
+        YELLOW,
+        NONE
     }
     
     protected enum CardNumber {
@@ -26,7 +27,48 @@ public class CardProperties {
         SIX,
         SEVEN,
         EIGHT,
-        NINE
+        NINE,
+        NO_NUMBER;
+        
+        public static CardNumber fromInt(int x) {
+            switch (x) {
+                case 0 -> {
+                    return ZERO;
+                }
+                case 1 -> {
+                    return ONE;
+                }
+                case 2 -> {
+                    return TWO;
+                }
+                case 3 -> {
+                    return THREE;
+                }
+                case 4 -> {
+                    return FOUR;
+                }
+                case 5 -> {
+                    return FIVE;
+                }
+                case 6 -> {
+                    return SIX;
+                }
+                case 7 -> {
+                    return SEVEN;
+                }
+                case 8 -> {
+                    return EIGHT;
+                }
+                case 9 -> {
+                    return NINE;
+                }
+                default -> {
+                    return NO_NUMBER;
+                }
+            }
+        }
+        
+        
     }
     
     protected enum CardRank {

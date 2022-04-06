@@ -12,12 +12,33 @@ import CardGame.Game;
  */
 public class UnoCardGame extends Game{
     
-    public UnoCardGame() {
-        super("Uno Card Game");
-    }
-    
     public static void main(String[] args) {
         System.out.println("Hello world");
+        GroupOfCards deck = new GroupOfCards();
+        deck.fillDeck();
+        System.out.println("Size of deck: " + deck.getSize());
+        deck.printGroup();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    }
+    
+    
+    
+    
+    
+    
+    
+    public UnoCardGame() {
+        super("Uno Card Game");
     }
 
     @Override
@@ -29,4 +50,5 @@ public class UnoCardGame extends Game{
     public void declareWinner() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+    
 }

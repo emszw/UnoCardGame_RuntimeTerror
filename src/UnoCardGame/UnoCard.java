@@ -47,12 +47,7 @@ public class UnoCard extends Card{
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return "Color: " + color + ", Number: " + number + ", Rank: " + rank;
     }
-    
-    
-    
-    
-    
     
 }
