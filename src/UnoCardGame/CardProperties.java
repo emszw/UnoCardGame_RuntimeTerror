@@ -37,8 +37,4 @@ public class CardProperties {
         SKIP,
         DRAW2
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Nishino_Kimio

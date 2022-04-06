@@ -8,6 +8,7 @@ package UnoCardGame;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import CardGame.Card;
 
 
 /**
@@ -61,6 +62,11 @@ public class GroupOfCards extends Card {
      */
     public void setSize(int size) {
         this.size = size;
+    }
+
+    @Override
+    public String toString() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 
