@@ -1,3 +1,6 @@
+package CardGame;
+
+import UnoCardGame.CardProperties;
 /**
  * SYST 17796 Project Base code.
  * Students can modify and extend to implement their game.
@@ -12,7 +15,7 @@
  * @author emszw Emily Szwalek Feb 2022
  * @author Kimio Nishino Feb 2022
  */
-public abstract class Card {
+public abstract class Card extends CardProperties {
     //default modifier for child classes
 
     /**
