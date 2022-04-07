@@ -89,9 +89,9 @@ public class UnoCardGame extends Game {
                 System.out.print(player.getName());
             }
             if (clockwise) {
-                System.out.print(" > ");
+                System.out.print(" -> ");
             } else {
-                System.out.print(" < ");
+                System.out.print(" <- ");
             }
         }
         System.out.println();
@@ -182,7 +182,9 @@ public class UnoCardGame extends Game {
                 System.out.println("Player " + players.get(playerIndex).getName()
                         + " pulled four cards from the deck");
             }
-        } catch (UnoCardException e) {
+        }
+        //this code makes baby jesus very sad
+        catch (UnoCardException e) {
             System.out.println(e.getMessage());
             //if the deck is empty while pulling from it,
             //the table deck will be remixed with the deck, and one card
@@ -190,8 +192,8 @@ public class UnoCardGame extends Game {
             //that's a soft reset of the table
             if (e.getTException() == CardException.EMPTY_DECK) {
                 table = deck.remixDeck(table);
-                //after remixing the deck with the table cards, try to draw 2
-                //cards again
+                //after remixing the deck with the table cards,  
+                //try again
                 try {
                     if (table.get(table.size() - 1).getRank() == CardRank.DRAW2) {
                         players.get(playerIndex).drawToHand(deck, 2);
@@ -203,7 +205,7 @@ public class UnoCardGame extends Game {
                                 + " pulled four cards from the deck");
                     }
                 } catch (UnoCardException ex) {
-                    System.out.println("This should NEVER HAPPEN");
+                    System.out.println("This should NEVER HAPPEN"); //lol
                     ex.printStackTrace();
                 }
             }
