@@ -69,7 +69,10 @@ public class UnoCard extends Card{
 
     @Override
     public String toString() {
-        return "Color: " + color + ", Number: " + number + ", Rank: " + rank;
+        if(number != CardNumber.NO_NUMBER)
+            return "Color: " + color + ", Number: " + number + ", Rank: " + rank;
+        else
+            return "Color: " + color + ", Rank: " + rank;
     }
     
 }

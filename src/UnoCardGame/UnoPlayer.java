@@ -17,17 +17,28 @@ public class UnoPlayer extends Player {
     
     private ArrayList<UnoCard> hand;
     private int size;
+    private  boolean bot;
     private static Scanner scan = new Scanner(System.in);
     
     public UnoPlayer(String name) {
         super(name);
         hand = new ArrayList<>();
+        bot = true;
         size = 0;
     }
 
     public int getSize() {
         return size;
     }
+
+    public boolean isBot() {
+        return bot;
+    }
+
+    public void setBot(boolean bot) {
+        this.bot = bot;
+    }
+    
     
     
     
@@ -35,15 +46,12 @@ public class UnoPlayer extends Player {
      * Player method utilised to draw cards from a GroupOfCards
      * @param deck : The GroupOfCards from which the UnoCards will be drawn from
      * @param ammount : The ammount of cards to be drawn
+     * @throws UnoCardGame.UnoCardException
      */
-    public void drawToHand(GroupOfCards deck, int ammount) {
+    public void drawToHand(GroupOfCards deck, int ammount) throws UnoCardException {
         for (int i = 0; i < ammount; i++) {
-            try {
-                hand.add(deck.drawCard());
-                size++;
-            } catch (UnoCardException e) {
-                System.out.println(e.getMessage());
-            }
+            hand.add(deck.drawCard());
+            size++;
         }
     }
     
@@ -61,7 +69,8 @@ public class UnoPlayer extends Player {
         ArrayList<Integer> availableOptions = new ArrayList<>();
         for (UnoCard unoCard : hand) {
             if(unoCard.getColor() == topOfTable.getColor() ||
-                    unoCard.getNumber() == topOfTable.getNumber() ||
+                    (unoCard.getNumber() == topOfTable.getNumber() &&
+                    unoCard.getNumber() != CardNumber.NO_NUMBER) ||
                     unoCard.getRank() == CardRank.WILD ||
                     unoCard.getRank() == CardRank.WILD_DRAW4)
                 availableOptions.add(hand.indexOf(unoCard));    
@@ -76,17 +85,19 @@ public class UnoPlayer extends Player {
             System.out.println(availableOption + ": " + 
                     hand.get(availableOption).toString());
         }
-        do {
-            System.out.println("Select one of the available options to discard");
-            choice = scan.nextInt();
-            scan.nextLine();
-        } while(!availableOptions.contains(choice));
+        if(!isBot()) {
+            do {
+                System.out.println("Select one of the available options to discard");
+                choice = scan.nextInt();
+                scan.nextLine();
+            } while(!availableOptions.contains(choice));
+        } else {
+            choice = availableOptions.get((int) (availableOptions.size() * Math.random()));
+        }
         return choice;
     }
     
     public void discardFromHand(ArrayList<UnoCard> table, GroupOfCards deck) throws UnoCardException {
-        System.out.println("Card on top of the table: " +
-                table.get(table.size()-1));
         if(!discardOptions(table.get(table.size()-1)).isEmpty()) {
             table.add(hand.remove(discardChoice(discardOptions(table.get(table.size()-1)))));
             UnoCard topOfTable = table.get(table.size()-1);
@@ -96,9 +107,13 @@ public class UnoPlayer extends Player {
                 for (int i = 0; i < 4; i++) {
                     System.out.println(i + ". " + CardColor.fromInt(i));
                 }
-                do {
-                    choice = Integer.parseInt(scan.nextLine());
-                } while (choice < 0 || choice > 3);
+                if(!isBot()) {
+                    do {
+                        choice = Integer.parseInt(scan.nextLine());
+                    } while (choice < 0 || choice > 3);
+                } else {
+                    choice = (int) (Math.random() * 4);
+                }
                 topOfTable.setColor(CardColor.fromInt(choice));
                 topOfTable.setActionTaken(true);
             }
@@ -106,8 +121,8 @@ public class UnoPlayer extends Player {
             table.get(table.size()-1) );
             size--;
         } else {
-            System.out.println("No available cards in hand to discard, drawing "
-                    + "one card from the deck");
+            System.out.println("No available cards in hand to discard, player " +
+                    getName() + " drawing one card from the deck");
             drawToHand(deck, 1);
         }
         if(size == 0) {

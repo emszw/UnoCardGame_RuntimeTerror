@@ -8,6 +8,7 @@ import CardGame.Game;
 import java.util.ArrayList;
 import UnoCardGame.CardProperties.*;
 import UnoCardGame.UnoCardException.*;
+import java.util.Scanner;
 
 /**
  *
@@ -22,19 +23,39 @@ public class UnoCardGame extends Game{
     private static boolean checkWinner = false;
     private static int rounds = 0;
     private static int playerIndex = 0;
+    private static int winner;
     
 
     
     
     public void initializeGame(String[] args) {
+        Scanner scan = new Scanner(System.in);
         System.out.println("Initializing game...");
         deck.fillDeck();
         deck.shuffle();
+        int botChoice;
+        System.out.println("Do you wanna start the game in Bot Mode?");  
+        do {     
+            System.out.println("1. Yes | 2. No");
+            botChoice = scan.nextInt();
+            scan.nextLine();
+        } while (botChoice != 1 && botChoice != 2);
+        boolean botMode = false;
+        if(botChoice == 1)
+            botMode = true;
         System.out.println("Initializing players...");  
-//        Scanner scan = new Scanner(System.in);
+
         for (int i=0; i<4; i++) {
             players.add(new UnoPlayer(args[i]));
-            players.get(i).drawToHand(deck, 7);
+            if(i==0) {
+                players.get(0).setBot(botMode);
+            }
+            try {
+                players.get(i).drawToHand(deck, 7);
+            } catch (UnoCardException e) {
+                System.out.println("Unexpected exception when initializing players");
+                System.out.println(e.getMessage() + "\n" +e.getTException());
+            }   
             System.out.println("Name for player " + i + ": " + players.get(i).getName());
 
         }      
@@ -55,11 +76,16 @@ public class UnoCardGame extends Game{
     
     
     public static void displayRound(){
+        System.out.println("==========ROUND " + rounds +"==============");
         System.out.println("Current ammount of cards on Deck: " + deck.getSize());
         System.out.println("============================");
-        System.out.println("Card on top of the table: " + table.get(table.size()-1).toString());
         for (UnoPlayer player : players) {
-            System.out.println("Number of cards on the hands of player " + player.getName() + ": " + player.getSize());
+            if(player.getSize() == 1) {
+                System.out.print("Number of cards on the hands of player " + player.getName() + ": " + player.getSize());
+                System.out.println(" [UNO!!!]");
+            } else {
+                System.out.println("Number of cards on the hands of player " + player.getName() + ": " + player.getSize());
+            }
         }
         System.out.println("============================");
         System.out.println("Current player order:");
@@ -74,6 +100,10 @@ public class UnoCardGame extends Game{
                 System.out.print(player.getName());
         }
         System.out.println();
+        players.get(playerIndex).displayHand();
+        System.out.println("=================================");
+        System.out.println(">>>>Card on top of the table: " + table.get(table.size()-1).toString() + "<<<<<");
+
     }
     
     @Override
@@ -82,12 +112,30 @@ public class UnoCardGame extends Game{
         while(!checkWinner) {
             displayRound();
             try {
-                players.get(playerIndex).discardFromHand(table, deck);
-                
+                players.get(playerIndex).discardFromHand(table, deck);  
+                if(players.get(playerIndex).isBot()) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }     
+                System.out.println(System.lineSeparator().repeat(50));
             } catch (UnoCardException e) {
-                if(e.getTException() == CardException.EMPTY_HAND)
+                if(e.getTException() == CardException.EMPTY_HAND) {
                     checkWinner = true;
+                    winner = playerIndex;
+                } else if(e.getTException() == CardException.UNO) {
+                    System.out.println(">>>>>>>>>>UNO!!!!<<<<<<<<<<<<");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    System.out.println(System.lineSeparator().repeat(50));
+                }
             }
+            
             if(clockwise) {
                 playerIndex++;
                 if(playerIndex >= 4)
@@ -97,6 +145,8 @@ public class UnoCardGame extends Game{
                 if(playerIndex < 0)
                     playerIndex = 3;
             }
+            
+            rounds++;
         }
         declareWinner();
     }
@@ -122,7 +172,9 @@ public class UnoCardGame extends Game{
 
     @Override
     public void declareWinner() {
-        System.out.println("Game over, player " + players.get(playerIndex).getName() + "won!");
+        System.out.println("==========================================");
+        System.out.println("Game over, player " + players.get(winner).getName() + " won!");
+        System.out.println("==========================================");
     }
     
 }

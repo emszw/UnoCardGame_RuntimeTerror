@@ -142,6 +142,15 @@ public class GroupOfCards {
         shuffle();
     }
     
+    public void remixDeck(ArrayList<UnoCard> tableDeck) {
+        if(cards.isEmpty()) {
+            System.out.println("Deck was empty, remixing it with the table deck!");
+            cards.addAll(tableDeck);
+            size = cards.size();
+            shuffle();
+        }
+    }
+    
     
     /**
      * A method that will get the group of cards as an ArrayList
