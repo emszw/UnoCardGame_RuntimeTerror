@@ -75,12 +75,18 @@ public class UnoCard extends Card{
                 !isActionTaken());
     }
     
+    public boolean isSkippable() {
+        return (getRank()==CardRank.SKIP && !isActionTaken());
+    }
+    
     @Override
-    public String toString() {
-        if(number != CardNumber.NO_NUMBER)
-            return "Color: " + color + ", Number: " + number + ", Type: " + rank;
-        else
+    public String toString() {        
+        if(rank == CardRank.NUMBER)
+            return "Color: " + color + ", Number: " + number;
+        else if(number == CardNumber.NO_NUMBER)
             return "Color: " + color + ", Type: " + rank;
+        else
+            return "Color: " + color + ", Number: " + number +", Type: " + rank;
     }
     
 }

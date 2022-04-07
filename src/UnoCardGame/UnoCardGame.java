@@ -109,8 +109,8 @@ public class UnoCardGame extends Game {
             //if the card on top of the table is a skip card and wasn't used before
             //it will just update the action to used.
             //otherwise, it will just try to discard a player's card as usual
-            if (table.get(table.size() - 1).getRank() == CardRank.SKIP
-                    && !table.get(table.size() - 1).isActionTaken()) {
+            if (table.get(table.size() - 1).isSkippable()) {
+                displaySkip();
                 System.out.println("Skipping player " + players.get(playerIndex).getName());
                 table.get(table.size() - 1).setActionTaken(true);
             } 
@@ -118,6 +118,7 @@ public class UnoCardGame extends Game {
             //before, it will update the action to true, and try to pull the
             //ammount of cards to the player. It will also skip to the next player;
             else if (table.get(table.size() - 1).isDrawable()) {
+                System.out.println("Drawable card on the table!");
                 pullCards();
                 table.get(table.size() - 1).setActionTaken(true);
             } else {
@@ -135,27 +136,84 @@ public class UnoCardGame extends Game {
                         && !table.get(table.size() - 1).isActionTaken()) {
                     clockwise = !clockwise;
                     table.get(table.size() - 1).setActionTaken(true);
+                    displayReverse();
                     System.out.println(">>>Order reversed!!<<<");
                 }
             }
             if (!checkWinner) {
+                int curPlayer = playerIndex;
                 nextPlayer();
                 System.out.println("Next player will be " + players.get(playerIndex).getName());
-                //If the player is a bot, thread will sleep for 2s
+                //If the current player is a bot, thread will sleep for 2s
                 //before printing a newline
-                if (players.get(playerIndex).isBot()) {
+                if (players.get(curPlayer).isBot()) {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                         System.out.println(System.lineSeparator().repeat(50));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    System.out.println(System.lineSeparator().repeat(50));
                 }
             }
         }
         declareWinner();
     }
-
+    
+    public void displaySkip() {
+        System.out.println("⠀⠀⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠀⠀⠀\n" +
+"⢠⣾⡿⠿⠛⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀\n" +
+"⢸⣿⢠⠞⣩⡄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠉⠉⠀⠀⠀⠀⠉⠛⢿⡆\n" +
+"⢸⣿⣄⣈⣉⣴⣿⣿⣿⣿⣿⣿⣿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⣿⣿⣿⡿⠃⠀⠀⠀⠀⠀⠀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⣿⣿⡟⠁⠀⠀⢀⣤⣶⣿⣿⣿⣿⣿⣿⣿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⣿⡏⠀⠀⢀⣴⣿⣿⣿⣿⣿⠿⠿⠿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⠀\n" +
+"⢸⣿⠏⠀⠀⢠⣿⣿⣿⣿⠟⠁⠀⠀⣠⣶⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀\n" +
+"⢸⡟⠀⠀⢠⣿⣿⣿⡟⠁⠀⢀⣠⣾⣿⣿⣿⡿⠋⣿⣿⣿⡇⠀⠀⠀⠀⠀\n" +
+"⠘⠀⠀⠀⢸⣿⣿⣿⠁⢀⣴⣿⣿⢿⣿⠿⠋⠀⢀⣿⣿⣿⠇⠀⠀⠀⣼⠀\n" +
+"⠀⠀⠀⠀⢸⣿⣿⣿⣶⣿⣿⣿⣿⠟⠁⠀⠀⢠⣾⣿⣿⡿⠀⠀⠀⣼⣿⠀\n" +
+"⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⠟⠁⠀⣀⣠⣶⣿⣿⣿⡿⠁⠀⠀⣼⣿⣿⠀\n" +
+"⠀⠀⠀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⢀⣾⣿⣿⣿⠀\n" +
+"⠀⠀⠀⠀⠀⠀⠀⠙⠻⠿⣿⣿⣿⣿⣿⠿⠟⠋⠀⠀⠀⣠⣾⣿⣿⣿⣿⠀\n" +
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⣿⣿⣿⣿⣿⣿⠀\n" +
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⠀\n" +
+"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀\n" +
+"⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣾⣿⣿⣿⣿⣿⣿⣿⠟⣋⠛⢿⣿⠀\n" +
+"⢸⣷⣤⣀⡀⠀⠀⠀⣀⣠⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠞⣡⡼⢸⣿⠀\n" +
+"⠈⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣤⣥⣴⣿⠟⠀");
+    }
+    
+    public void displayReverse() {
+        System.out.println("⠐⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠂\n" +
+"⠄⠄⣰⣾⣿⣿⣿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣆⠄⠄\n" +
+"⠄⠄⣿⣿⣿⡿⠋⠄⡀⣿⣿⣿⣿⣿⣿⣿⣿⠿⠛⠋⣉⣉⣉⡉⠙⠻⣿⣿⠄⠄\n" +
+"⠄⠄⣿⣿⣿⣇⠔⠈⣿⣿⣿⣿⣿⡿⠛⢉⣤⣶⣾⣿⣿⣿⣿⣿⣿⣦⡀⠹⠄⠄\n" +
+"⠄⠄⣿⣿⠃⠄⢠⣾⣿⣿⣿⠟⢁⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡄⠄⠄\n" +
+"⠄⠄⣿⣿⣿⣿⣿⣿⣿⠟⢁⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠄⠄\n" +
+"⠄⠄⣿⣿⣿⣿⣿⡟⠁⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠄⠄\n" +
+"⠄⠄⣿⣿⣿⣿⠋⢠⣾⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⣿⠄⠄\n" +
+"⠄⠄⣿⣿⡿⠁⣰⣿⣿⣿⣿⣿⣿⣿⣿⠗⠄⠄⠄⠄⣿⣿⣿⣿⣿⣿⣿⡟⠄⠄\n" +
+"⠄⠄⣿⡿⠁⣼⣿⣿⣿⣿⣿⣿⡿⠋⠄⠄⠄⣠⣄⢰⣿⣿⣿⣿⣿⣿⣿⠃⠄⠄\n" +
+"⠄⠄⡿⠁⣼⣿⣿⣿⣿⣿⣿⣿⡇⠄⢀⡴⠚⢿⣿⣿⣿⣿⣿⣿⣿⣿⡏⢠⠄⠄\n" +
+"⠄⠄⠃⢰⣿⣿⣿⣿⣿⣿⡿⣿⣿⠴⠋⠄⠄⢸⣿⣿⣿⣿⣿⣿⣿⡟⢀⣾⠄⠄\n" +
+"⠄⠄⢀⣿⣿⣿⣿⣿⣿⣿⠃⠈⠁⠄⠄⢀⣴⣿⣿⣿⣿⣿⣿⣿⡟⢀⣾⣿⠄⠄\n" +
+"⠄⠄⢸⣿⣿⣿⣿⣿⣿⣿⠄⠄⠄⠄⢶⣿⣿⣿⣿⣿⣿⣿⣿⠏⢀⣾⣿⣿⠄⠄\n" +
+"⠄⠄⣿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣶⣶⣶⣿⣿⣿⣿⣿⣿⣿⠋⣠⣿⣿⣿⣿⠄⠄\n" +
+"⠄⠄⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢁⣼⣿⣿⣿⣿⣿⠄⠄\n" +
+"⠄⠄⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⢁⣴⣿⣿⣿⣿⣿⣿⣿⠄⠄\n" +
+"⠄⠄⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⢁⣴⣿⣿⣿⣿⠗⠄⠄⣿⣿⠄⠄\n" +
+"⠄⠄⣆⠈⠻⢿⣿⣿⣿⣿⣿⣿⠿⠛⣉⣤⣾⣿⣿⣿⣿⣿⣇⠠⠺⣷⣿⣿⠄⠄\n" +
+"⠄⠄⣿⣿⣦⣄⣈⣉⣉⣉⣡⣤⣶⣿⣿⣿⣿⣿⣿⣿⣿⠉⠁⣀⣼⣿⣿⣿⠄⠄\n" +
+"⠄⠄⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣶⣾⣿⣿⡿⠟⠄⠄\n" +
+"⠠⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄");
+    }
+    
+    
+    
     public void nextPlayer() {
         if (clockwise) {
             playerIndex++;

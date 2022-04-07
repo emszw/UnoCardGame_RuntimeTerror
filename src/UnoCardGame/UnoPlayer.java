@@ -118,7 +118,7 @@ public class UnoPlayer extends Player {
                     choice = (int) (Math.random() * 4);
                 }
                 topOfTable.setColor(CardColor.fromInt(choice));
-                topOfTable.setActionTaken(true);
+                topOfTable.setActionTaken(false);
             }
             System.out.println("New card on top of the table: " +
             table.get(table.size()-1) );
