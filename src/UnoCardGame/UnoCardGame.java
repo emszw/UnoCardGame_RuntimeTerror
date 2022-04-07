@@ -6,7 +6,8 @@ package UnoCardGame;
 
 import CardGame.Game;
 import java.util.ArrayList;
-import java.util.Scanner;
+import UnoCardGame.CardProperties.*;
+import UnoCardGame.UnoCardException.*;
 
 /**
  *
@@ -14,90 +15,114 @@ import java.util.Scanner;
  */
 public class UnoCardGame extends Game{
     
+    private static GroupOfCards deck;
     private static ArrayList<UnoPlayer> players;
     private static ArrayList<UnoCard> table;
-    private static boolean clockwise;
+    private static boolean clockwise = true;
+    private static boolean checkWinner = false;
+    private static int rounds = 0;
+    private static int playerIndex = 0;
+    
 
     
     
-    public static void initializeGame(GroupOfCards cards, ArrayList<UnoPlayer> players, ArrayList<UnoCard> table, String[] args) {
+    public void initializeGame(String[] args) {
         System.out.println("Initializing game...");
-        cards.fillDeck();
-        cards.shuffle();
+        deck.fillDeck();
+        deck.shuffle();
         System.out.println("Initializing players...");  
 //        Scanner scan = new Scanner(System.in);
         for (int i=0; i<4; i++) {
-            System.out.println("Name for player " + i + ": ");
             players.add(new UnoPlayer(args[i]));
-            players.get(i).drawToHand(cards, 7);
+            players.get(i).drawToHand(deck, 7);
+            System.out.println("Name for player " + i + ": " + players.get(i).getName());
+
         }      
         try{
-            table.add(cards.drawCard());
+            table.add(deck.drawCard());
+            while(table.get(0).getRank() == CardRank.WILD ||
+                    table.get(0).getRank() == CardRank.WILD_DRAW4) {
+                System.out.println("Card pulled to the table was a WILD CARD");
+                deck.addCardToDeck(table.remove(0));
+                table.add(deck.drawCard());
+                System.out.println("New Card pulled to table: " + table.get(0).toString());
+            }
         } catch(UnoCardException e) {
             System.out.println(e.getMessage());
+            System.out.println("Cause of exception: " + e.getTException());
         }
     }
     
-    public static void playRound() {
-        
-    }
     
-    
-    
-    
-    
-    public static void main(String[] args) {
-        System.out.println("Welcome to Uno Card Game");
-        players = new ArrayList<>(4);
-        table = new ArrayList<>();
-        GroupOfCards deck = new GroupOfCards();
-        
-        initializeGame(deck, players, table, args);
-        
-        //following prints are for debugging
+    public static void displayRound(){
+        System.out.println("Current ammount of cards on Deck: " + deck.getSize());
+        System.out.println("============================");
+        System.out.println("Card on top of the table: " + table.get(table.size()-1).toString());
         for (UnoPlayer player : players) {
-            player.displayHand();
+            System.out.println("Number of cards on the hands of player " + player.getName() + ": " + player.getSize());
         }
-        System.out.println("Top of the Table is: " +
-                table.get(table.size()-1).toString());
-        System.out.println(deck.getSize() + " cards remaining in the deck");
-//        System.out.println("Full deck remaining: ");
-//        deck.printGroup();
-        try {
-            players.get(0).discardFromHand(table);
-        } catch (UnoCardException e) {
-            System.out.println(e.getMessage());
+        System.out.println("============================");
+        System.out.println("Current player order:");
+        for (UnoPlayer player : players) {
+            if(clockwise)
+                System.out.print(" > ");
+            else
+                System.out.print(" < ");
+            if(players.indexOf(player) == playerIndex) {
+                System.out.print("[" + player.getName() + "]");
+            } else
+                System.out.print(player.getName());
         }
-        
-        
-    
-    
-    
-    
-    
-    
-    
-    
+        System.out.println();
     }
     
-    
-    
-    
-    
-    
-    
-    public UnoCardGame() {
-        super("Uno Card Game");
-    }
-
     @Override
     public void play() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        System.out.println("Game starting!!");
+        while(!checkWinner) {
+            displayRound();
+            try {
+                players.get(playerIndex).discardFromHand(table, deck);
+                
+            } catch (UnoCardException e) {
+                if(e.getTException() == CardException.EMPTY_HAND)
+                    checkWinner = true;
+            }
+            if(clockwise) {
+                playerIndex++;
+                if(playerIndex >= 4)
+                    playerIndex = 0;
+            } else {
+                playerIndex--;
+                if(playerIndex < 0)
+                    playerIndex = 3;
+            }
+        }
+        declareWinner();
+    }
+    
+    
+    public void checkTableAction() {
+        UnoCard topOfTable = table.get(table.size()-1);
+        if(topOfTable.getRank() != CardRank.NUMBER && topOfTable.isActionTaken() ) {
+            if(topOfTable.getRank() == CardRank.REVERSE) {
+                clockwise = !clockwise;
+            }
+        }
+    }
+    
+    
+        
+    public UnoCardGame() {
+        super("Uno Card Game");
+        players = new ArrayList<>(4);
+        table = new ArrayList<>();
+        deck = new GroupOfCards();
     }
 
     @Override
     public void declareWinner() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        System.out.println("Game over, player " + players.get(playerIndex).getName() + "won!");
     }
     
 }
