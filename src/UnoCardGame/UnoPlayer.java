@@ -49,6 +49,9 @@ public class UnoPlayer extends Player {
      * @throws UnoCardGame.UnoCardException
      */
     public void drawToHand(GroupOfCards deck, int ammount) throws UnoCardException {
+        if(deck.getCards().size() - ammount < 1)
+            throw new UnoCardException("Deck will be empty before pulling the"
+                    + " right ammount!", CardException.EMPTY_DECK);
         for (int i = 0; i < ammount; i++) {
             hand.add(deck.drawCard());
             size++;
@@ -59,7 +62,7 @@ public class UnoPlayer extends Player {
      * Method used for debugging reasons only
      */
     public void displayHand() {
-        System.out.println("Hands of player: " + super.getName());
+        System.out.println("Cards in the hands of player: " + super.getName());
         for (UnoCard unoCard : hand) 
             System.out.println(unoCard.toString());     
     }
@@ -128,10 +131,6 @@ public class UnoPlayer extends Player {
         if(size == 0) {
             scan.close();
             throw new UnoCardException("Player has no more cards in hand!", CardException.EMPTY_HAND);
-        }
-        if(size == 1) {
-            throw new UnoCardException("UNO! Player " + super.getName() + 
-                    " has only one card in hand!", CardException.UNO);
         }
     }
     
