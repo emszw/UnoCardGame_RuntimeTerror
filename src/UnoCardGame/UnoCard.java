@@ -20,8 +20,7 @@ public class UnoCard extends Card{
         this.color = color;
         this.number = number;
         this.rank = rank;
-        if(rank != CardRank.NUMBER)
-            actionTaken = false;
+        actionTaken = false;
     }
 
     public boolean isActionTaken() {
@@ -67,12 +66,21 @@ public class UnoCard extends Card{
         return (getRank() == CardRank.WILD || getRank() == CardRank.WILD_DRAW4);
     }
 
+    /**
+     * Checks if the card is either draw2 or wild_draw4 and hasn't been used yet.
+     * @return 
+     */
+    public boolean isDrawable() {
+        return ((getRank()==CardRank.DRAW2 || getRank()==CardRank.WILD_DRAW4) &&
+                !isActionTaken());
+    }
+    
     @Override
     public String toString() {
         if(number != CardNumber.NO_NUMBER)
             return "Color: " + color + ", Number: " + number + ", Rank: " + rank;
         else
-            return "Color: " + color + ", Rank: " + rank;
+            return "Color: " + color + ", Type: " + rank;
     }
     
 }

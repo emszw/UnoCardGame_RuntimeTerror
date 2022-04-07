@@ -142,13 +142,19 @@ public class GroupOfCards {
         shuffle();
     }
     
-    public void remixDeck(ArrayList<UnoCard> tableDeck) {
-        if(cards.isEmpty()) {
-            System.out.println("Deck was empty, remixing it with the table deck!");
-            cards.addAll(tableDeck);
-            size = cards.size();
+    public ArrayList<UnoCard> remixDeck(ArrayList<UnoCard> tableDeck) {
+        System.out.println("Deck was going to be empty,"
+                + " remixing it with the table deck!");
+        cards.addAll(tableDeck);
+        //making sure I'm shuffling the deck to not pull a wild
+        //card to the table
+        do{
             shuffle();
-        }
+        } while(cards.get(0).isWild());
+        tableDeck.removeAll(tableDeck);
+        tableDeck.add(cards.remove(0));
+        size = cards.size();
+        return tableDeck;
     }
     
     
