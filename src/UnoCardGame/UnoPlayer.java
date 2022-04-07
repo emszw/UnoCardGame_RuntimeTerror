@@ -7,7 +7,7 @@ package UnoCardGame;
 import CardGame.Player;
 import java.util.ArrayList;
 import java.util.Scanner;
-import UnoCardGame.CardProperties.CardRank;
+import UnoCardGame.CardProperties.*;
 import UnoCardGame.UnoCardException.*;
 /**
  *
@@ -17,12 +17,19 @@ public class UnoPlayer extends Player {
     
     private ArrayList<UnoCard> hand;
     private int size;
+    private static Scanner scan = new Scanner(System.in);
     
     public UnoPlayer(String name) {
         super(name);
         hand = new ArrayList<>();
         size = 0;
     }
+
+    public int getSize() {
+        return size;
+    }
+    
+    
     
     /**
      * Player method utilised to draw cards from a GroupOfCards
@@ -63,7 +70,6 @@ public class UnoPlayer extends Player {
     }
     
     private int discardChoice(ArrayList<Integer> availableOptions){
-        Scanner scan = new Scanner(System.in);
         int choice;
         System.out.println("Available options to discard: ");
         for (Integer availableOption : availableOptions) {
@@ -73,23 +79,45 @@ public class UnoPlayer extends Player {
         do {
             System.out.println("Select one of the available options to discard");
             choice = scan.nextInt();
+            scan.nextLine();
         } while(!availableOptions.contains(choice));
-        scan.close();
         return choice;
     }
     
-    public void discardFromHand(ArrayList<UnoCard> table) throws UnoCardException {
+    public void discardFromHand(ArrayList<UnoCard> table, GroupOfCards deck) throws UnoCardException {
         System.out.println("Card on top of the table: " +
                 table.get(table.size()-1));
-        table.add(hand.remove(discardChoice(discardOptions(table.get(table.size()-1)))));
-        System.out.println("New card on top of the table: " +
-                table.get(table.size()-1));
-        size--;
-        if(size == 0)
+        if(!discardOptions(table.get(table.size()-1)).isEmpty()) {
+            table.add(hand.remove(discardChoice(discardOptions(table.get(table.size()-1)))));
+            UnoCard topOfTable = table.get(table.size()-1);
+            if(topOfTable.isWild()) {
+                int choice = -1;
+                System.out.println("Choose the color for the WildCard: ");
+                for (int i = 0; i < 4; i++) {
+                    System.out.println(i + ". " + CardColor.fromInt(i));
+                }
+                do {
+                    choice = Integer.parseInt(scan.nextLine());
+                } while (choice < 0 || choice > 3);
+                topOfTable.setColor(CardColor.fromInt(choice));
+                topOfTable.setActionTaken(true);
+            }
+            System.out.println("New card on top of the table: " +
+            table.get(table.size()-1) );
+            size--;
+        } else {
+            System.out.println("No available cards in hand to discard, drawing "
+                    + "one card from the deck");
+            drawToHand(deck, 1);
+        }
+        if(size == 0) {
+            scan.close();
             throw new UnoCardException("Player has no more cards in hand!", CardException.EMPTY_HAND);
-        if(size == 1)
+        }
+        if(size == 1) {
             throw new UnoCardException("UNO! Player " + super.getName() + 
                     " has only one card in hand!", CardException.UNO);
+        }
     }
     
     

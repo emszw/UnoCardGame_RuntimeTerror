@@ -14,7 +14,17 @@ public class CardProperties {
         GREEN,
         BLUE,
         YELLOW,
-        NONE
+        NONE;
+        
+        public static CardColor fromInt(int x) {
+            return switch (x) {
+                case 0 -> RED;
+                case 1 -> GREEN;
+                case 2 -> BLUE;
+                case 3 -> YELLOW;
+                default -> NONE;
+            };
+        }
     }
     
     protected enum CardNumber {
@@ -66,9 +76,7 @@ public class CardProperties {
                     return NO_NUMBER;
                 }
             }
-        }
-        
-        
+        }   
     }
     
     protected enum CardRank {

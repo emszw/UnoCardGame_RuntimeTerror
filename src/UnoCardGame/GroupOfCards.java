@@ -103,7 +103,7 @@ public class GroupOfCards {
             cards.add(new UnoCard(CardColor.NONE, CardNumber.NO_NUMBER, CardRank.WILD_DRAW4));
         }
         this.size = cards.size();
-        System.out.println("Deck with " + this.size + " initialized.");
+        System.out.println("Deck with " + this.size + " cards initialized.");
     }
     
     /**
@@ -130,6 +130,17 @@ public class GroupOfCards {
         }   
     }
     
+    /**
+     * Method used in case the first card pulled to the table is a WILD CARD
+     * It gets the card back to the deck, and shuffles it.
+     * @param card - Card that was just removed from the deck is put back
+     * to the list
+     */
+    public void addCardToDeck(UnoCard card) {
+        cards.add(card);
+        size++;
+        shuffle();
+    }
     
     
     /**

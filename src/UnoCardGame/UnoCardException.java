@@ -16,10 +16,16 @@ public class UnoCardException extends Exception{
         UNO
     }
     
-    private CardException cause;
+    private CardException typeOfException;
     
     public UnoCardException(String message, CardException cause) {
         super(message);
-        this.cause = cause;
+        this.typeOfException = cause;
     }
+
+    public CardException getTException() {
+        return typeOfException;
+    }
+    
+    
 }
