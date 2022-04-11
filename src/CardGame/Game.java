@@ -14,7 +14,7 @@ import java.util.ArrayList;
  *
  * @author dancye
  * @author Paul Bonenfant Jan 2020
- * @author emszw Emily Szwalek Feb 2022
+ * @author Emily Szwalek Feb 2022
  * @author Kimio Nishino Feb 2022
  */
 public abstract class Game {
@@ -24,7 +24,7 @@ public abstract class Game {
 
     public Game(String name) {
         this.name = name;
-        players = new ArrayList();
+        players = new ArrayList<Player>();
     }
 
     /**

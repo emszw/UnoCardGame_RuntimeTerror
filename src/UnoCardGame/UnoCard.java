@@ -9,6 +9,7 @@ import CardGame.Card;
 /**
  *
  * @author Kimio Nishino
+ * @author Emily Szwalek
  */
 public class UnoCard extends Card{
     private CardColor color;

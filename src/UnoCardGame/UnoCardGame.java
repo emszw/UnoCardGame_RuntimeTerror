@@ -13,11 +13,12 @@ import java.util.Scanner;
 /**
  *
  * @author Kimio Nishino
+ * @author Emily Szwalek
  */
 public class UnoCardGame extends Game {
 
     private static GroupOfCards deck;
-    private static ArrayList<UnoPlayer> players;
+    private static ArrayList<UnoPlayer> players = new ArrayList<>();
     private static ArrayList<UnoCard> table;
     private static boolean clockwise = true;
     private static boolean checkWinner = false;
@@ -30,7 +31,13 @@ public class UnoCardGame extends Game {
         deck.fillDeck();
         deck.shuffle();
         int botChoice;
-        System.out.println("Do you wanna start the game in Bot Mode?");
+        System.out.println("\nWelcome to our Uno Game!\n" + 
+               "Our card game has two play modes:\n");
+        System.out.println("     Bot vs Bot Mode OR Player vs Bot Mode\n");
+        System.out.println("Bot vs Bot Mode: 4 Bot players will play against each other while the outcome of each round is displayed within the output terminal");
+        System.out.println("Player vs Bot Mode: You play against 3 Bot players and choose your own moves");
+        System.out.println("============================");
+        System.out.println("Do you wanna start the game in Bot vs Bot Mode?");
         do {
             System.out.println("1. Yes | 2. No");
             botChoice = scan.nextInt();

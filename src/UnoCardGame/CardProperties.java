@@ -7,6 +7,7 @@ package UnoCardGame;
 /**
  *
  * @author nishino
+ * @author Emily Szwalek
  */
 public class CardProperties {
     protected enum CardColor {

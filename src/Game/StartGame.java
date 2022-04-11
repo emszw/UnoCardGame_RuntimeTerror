@@ -8,9 +8,11 @@ import UnoCardGame.*;
 /**
  *
  * @author Kimio Nishino
+ * @author Emily Szwalek
  */
 public class StartGame {
     public static void main(String[] args) {
+        
        UnoCardGame game = new UnoCardGame();
        game.initializeGame(args);
        game.play();

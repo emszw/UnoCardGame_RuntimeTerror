@@ -12,7 +12,7 @@ package CardGame;
  *
  * @author dancye
  * @author Paul Bonenfant Jan 2020
- * @author emszw Emily Szwalek Feb 2022
+ * @author Emily Szwalek Feb 2022
  * @author Kimio Nishino Feb 2022
  */
 public abstract class Player {

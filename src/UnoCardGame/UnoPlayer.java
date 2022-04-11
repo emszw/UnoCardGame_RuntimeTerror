@@ -12,6 +12,8 @@ import UnoCardGame.UnoCardException.*;
 /**
  *
  * @author Kimio Nishino
+ * @author Emily Szwalek
+ * 
  */
 public class UnoPlayer extends Player {
     
