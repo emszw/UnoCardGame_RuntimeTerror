@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit4TestClass.java to edit this template
- */
+
 package UnoCardGame;
 
 import java.util.ArrayList;
@@ -26,12 +23,18 @@ public class GroupOfCardsTest {
      * Test of fillDeck method, of class GroupOfCards.
      */
     @Test
-    public void testFillDeck() {
+    public void testFillDeckGood() {
+        System.out.println("fillDeck Good");
+        GroupOfCards instance = new GroupOfCards();
+        ArrayList<UnoCard> cards = new ArrayList<>();
+        instance.fillDeck();
+    }
+
+    @Test
+    public void testFillDeckBad() {
         System.out.println("fillDeck");
         GroupOfCards instance = new GroupOfCards();
         instance.fillDeck();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**

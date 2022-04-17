@@ -40,14 +40,23 @@ public class UnoPlayerTest {
      * Test of isBot method, of class UnoPlayer.
      */
     @Test
-    public void testIsBot() {
-        System.out.println("isBot");
-        UnoPlayer instance = null;
+    public void testIsBotGood() {
+        System.out.println("isBot Good");
+        UnoPlayer instance = new UnoPlayer(Test);
+        instance.setBot(true);
+        boolean expResult = true;
+        boolean result = instance.isBot();
+        assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testIsBotBad() {
+        System.out.println("isBot Bad");
+        UnoPlayer instance = new UnoPlayer(Test);
+        instance.setBot(false);
         boolean expResult = false;
         boolean result = instance.isBot();
         assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
     }
 
     /**
