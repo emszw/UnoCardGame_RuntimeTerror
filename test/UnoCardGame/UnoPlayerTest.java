@@ -42,7 +42,7 @@ public class UnoPlayerTest {
     @Test
     public void testIsBotGood() {
         System.out.println("isBot Good");
-        UnoPlayer instance = new UnoPlayer(Test);
+        UnoPlayer instance = null;
         instance.setBot(true);
         boolean expResult = true;
         boolean result = instance.isBot();
@@ -52,7 +52,7 @@ public class UnoPlayerTest {
     @Test
     public void testIsBotBad() {
         System.out.println("isBot Bad");
-        UnoPlayer instance = new UnoPlayer(Test);
+        UnoPlayer instance = null;
         instance.setBot(false);
         boolean expResult = false;
         boolean result = instance.isBot();
